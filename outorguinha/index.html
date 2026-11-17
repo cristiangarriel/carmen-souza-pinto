@@ -159,15 +159,15 @@ function build(n,cfg){
   return {w:n,g,en,mid:cfg.mid*T,start:2*T};
 }
 const LEVELS=[
- build(64,{pits:[[14,2],[27,2],[40,3],[50,2]],haz:[20,34,45],mid:31,
+ build(64,{pits:[[14,2],[27,2],[40,2],[50,2]],haz:[10,34,45],mid:31,
    plats:[[16,5,3],[29,5,3],[42,5,3]],
    coins:[[12,6],[17,4],[18,4],[24,7],[30,4],[36,6],[43,4],[44,4],[55,7],[57,7]],en:[[24,8-1],[53,7]].map(([x,y])=>[x,y+0])}),
- build(76,{pits:[[12,3],[24,3],[34,2],[47,3],[60,3]],haz:[18,29,38,52,56],mid:38,
-   plats:[[13,5,2],[25,5,2],[44,6,2],[48,5,2],[61,5,2]],
-   coins:[[13,4],[14,4],[21,7],[26,4],[32,6],[41,7],[48,4],[49,4],[58,7],[62,4]],en:[[22,7],[42,7],[64,7]]}),
- build(92,{pits:[[11,3],[22,3],[30,3],[40,3],[55,3],[70,3]],haz:[16,26,35,46,50,62,66],mid:46,
-   plats:[[12,5,2],[23,5,2],[31,5,2],[41,5,2],[56,5,2],[71,5,2],[60,4,2]],
-   coins:[[12,4],[13,4],[19,7],[24,4],[32,4],[41,4],[48,7],[57,4],[60,3],[72,4],[78,7]],en:[[18,7],[28,7],[37,7],[52,7],[64,7],[75,7]]}),
+ build(76,{pits:[[12,3],[24,3],[34,2],[47,3],[60,3]],haz:[8,31,55,58],mid:38,
+   plats:[[16,5,2],[28,5,2],[44,6,2],[51,5,2],[64,5,2]],
+   coins:[[16,4],[17,4],[21,7],[28,4],[32,6],[41,7],[51,4],[52,4],[58,7],[64,4]],en:[[22,7],[42,7],[64,7]]}),
+ build(92,{pits:[[11,3],[22,3],[30,3],[40,3],[55,3],[70,3]],haz:[19,48,52,62,66],mid:46,
+   plats:[[15,5,2],[26,5,2],[34,5,2],[44,5,2],[59,5,2],[74,5,2],[62,4,2]],
+   coins:[[15,4],[16,4],[20,7],[26,4],[34,4],[44,4],[48,7],[59,4],[62,3],[74,4],[80,7]],en:[[8,7],[78,7],[85,7]]}),
 ];
 // corrige: inimigos 'y' em tiles (linha 7 = em cima do chão)
 LEVELS.forEach(L=>L.en.forEach(e=>{e.y=7*T+T-11;}));
@@ -243,7 +243,7 @@ const solid=c=>c==='#'||c==='B';
 function setState(s){state=s;stateT=0;}
 
 /* ---------- física ---------- */
-const SPEED=1.45,GRAV=.24,JUMP=-4.7;
+const SPEED=1.45,GRAV=.22,JUMP=-4.8;
 function hitBoxSolid(x,y,w,h){
   const x0=Math.floor(x/T),x1=Math.floor((x+w-.01)/T),y0=Math.floor(y/T),y1=Math.floor((y+h-.01)/T);
   for(let ty=y0;ty<=y1;ty++)for(let tx=x0;tx<=x1;tx++)if(solid(tileAt(tx,ty)))return true;
@@ -291,7 +291,7 @@ function updatePlay(){
     if(c==='o'){L.g[ty][tx]='.';drops++;score+=10;SFX.coin();burst(tx*T+8,ty*T+8,'#9bd8ff',5);}
     else if(c==='S'){
       // hitbox menor do perigo
-      const hx=tx*T+3,hy=ty*T+5,hw=10,hh=11;
+      const hx=tx*T+4,hy=ty*T+6,hw=8,hh=10;
       if(pl.x+pl.w>hx&&pl.x<hx+hw&&pl.y+pl.h>hy&&pl.y<hy+hh)hurt();
     }else if(c==='D'){win();return;}
   }
@@ -307,7 +307,7 @@ function updatePlay(){
     const floor=solid(tileAt(Math.floor(front/T),Math.floor((e.y+e.h+1)/T)));
     if(wall||!floor)e.vx*=-1;else e.x=nx;
     if(pl.x+pl.w>e.x+1&&pl.x<e.x+e.w-1&&pl.y+pl.h>e.y&&pl.y<e.y+e.h){
-      if(pl.vy>0.5&&pl.y+pl.h-e.y<9){e.alive=false;pl.vy=-3.4;score+=50;SFX.stomp();burst(e.x+6,e.y+6,'#fff',8);}
+      if(pl.vy>0.5&&pl.y+pl.h-e.y<9){e.alive=false;pl.vy=-2.8;score+=50;SFX.stomp();burst(e.x+6,e.y+6,'#fff',8);}
       else hurt();
     }
   }
